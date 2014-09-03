@@ -4,11 +4,11 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-mqtt"
-  spec.version       = "0.0.3"
-  spec.authors       = ["Yuuna Kurita"]
-  spec.email         = ["yuuna.m@gmail.com"]
-  spec.summary       = %q{fluentd input plugin for mqtt server}
-  spec.description   = %q{fluentd input plugin for mqtt server}
+  spec.version       = "0.0.4"
+  spec.authors       = %w(Yuuna Kurita Takahiro HAMAGUCHI)
+  spec.email         = %w(yuuna.m@gmail.com tk.hamaguchi@gmail.com)
+  spec.summary       = %q{fluentd input/output plugin for mqtt server}
+  spec.description   = %q{fluentd input/output plugin for mqtt server}
   spec.homepage      = "http://github.com/yuuna/fluent-plugin-mqtt"
   spec.license       = "MIT"
 
@@ -19,9 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "mqtt"
-  spec.add_development_dependency "fluentd"
-  spec.add_runtime_dependency "mqtt"
+  spec.add_runtime_dependency "mqtt", "~> 0.3.0"
   spec.add_runtime_dependency "fluentd"
   spec.add_runtime_dependency "yajl-ruby"
 

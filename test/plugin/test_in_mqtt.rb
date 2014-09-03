@@ -1,6 +1,6 @@
 require 'helper'
 
-class Fluent::MqttInput 
+class Fluent::MqttInput
   def emit topic, message , time = Fluent::Engine.now
     if message.class == Array
       message.each do |data|
@@ -20,25 +20,37 @@ class MqttInputTest < Test::Unit::TestCase
   end
 
 
- CONFIG = %[
+  CONFIG = %[
   ]
 
-  def create_driver(conf = CONFIG) 
+  def create_driver(conf = CONFIG)
     Fluent::Test::InputTestDriver.new(Fluent::MqttInput).configure(conf)
   end
-  
+
   def test_configure
     d = create_driver(
-      %[ bind 127.0.0.1
-         port 1300 ] 
+      %[
+        bind 127.0.0.1
+        port 1300
+        username hoge
+        password fuga
+      ]
     )
     assert_equal '127.0.0.1', d.instance.bind
     assert_equal 1300, d.instance.port
+    assert_equal 'hoge', d.instance.username
+    assert_equal 'fuga', d.instance.password
   end
 
 
   def sub_client
-    connect = MQTT::Client.connect
+    d = create_driver
+    connect = MQTT::Client.connect(
+      host: d.instance.bind,
+      port: d.instance.port,
+      username: d.instance.username,
+      password: d.instance.password
+    )
     connect.subscribe('#')
     return connect
   end
@@ -46,7 +58,7 @@ class MqttInputTest < Test::Unit::TestCase
 
   def test_client
     d = create_driver
-    time = Time.parse("2011-01-02 13:14:15 UTC").to_i    
+    time = Time.parse("2011-01-02 13:14:15 UTC").to_i
     d.expect_emit "tag1", time, {"t" => time, "v" => {"a"=>1}}
     d.expect_emit "tag2", time, {"t" => time, "v" => {"a"=>2}}
     d.expect_emit "tag3", time, {"t" => time, "v" => {"a"=>31}}
@@ -56,7 +68,7 @@ class MqttInputTest < Test::Unit::TestCase
       d.expected_emits.each {|tag,time,record|
         send_data tag, time, record
       }
-      send_data "tag3", time , [{"t" => time, "v" => {"a"=>31}} , {"t" => time, "v" => {"a"=>32}}] 
+      send_data "tag3", time , [{"t" => time, "v" => {"a"=>31}} , {"t" => time, "v" => {"a"=>32}}]
       sleep 0.5
     end
 
