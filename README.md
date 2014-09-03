@@ -6,7 +6,7 @@ Fluent plugin for MQTT protocol
 
 Add this line to your application's Gemfile:
 
-    gem 'fluent-plugin-mqtt'
+    $ gem 'fluent-plugin-mqtt', github:'tk-hamaguchi/fluent-plugin-mqtt'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install fluent-plugin-mqtt
+    $ gem specific_install -l 'https://github.com/tk-hamaguchi/fluent-plugin-mqtt.git'
 
 ## Usage
 
@@ -31,10 +31,15 @@ MQTT topic is set "#".
 
 ```
 
-## Contributing
+Output plugin config.
+MQTT topic is set s/\./\//g Fluentd tag
 
-1. Fork it ( http://github.com/yuuna/fluent-plugin-mqtt/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+```
+<match mqtt.**>
+  type mqtt
+  bind YOUR_MQTT_BROKERs_IP_OR_DOMAIN
+  port YOUR_MQTT_BROKERs_PORT
+  username YOUR_MQTT_BROKERs_USERNAME
+  password YOUR_MQTT_BROKERs_PASSWORD
+</match>
+```

@@ -30,7 +30,6 @@ module Fluent
       super
       $log.debug "start mqtt #{@bind}"
       @connect = MQTT::Client.connect({host: @bind, port: @port, username: @username, password: @password})
-      @connect
     end
 
     def emit tag, es, chain
